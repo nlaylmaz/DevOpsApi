@@ -33,6 +33,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
 
+    env:
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
     steps:
       - name: Kodu al
         uses: actions/checkout@v4
@@ -47,3 +50,12 @@ jobs:
 
       - name: Test
         run: dotnet test
+
+      - name: Secret kontrol
+        run: |
+          if [ -z "$DB_PASSWORD" ]; then
+      	    echo "Secret gelmedi"
+            exit 1
+          else
+            echo "Secret başarıyla geldi"
+          fi
