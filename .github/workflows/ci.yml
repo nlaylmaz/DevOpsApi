@@ -26,6 +26,15 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
+    - name: Publish
+      run: dotnet publish -c Release -o publish
+
+    - name: Artifact yükle
+      uses: actions/upload-artifact@v4
+      with:
+        name: devops-api-build
+        path: publish/
+
       - name: Environment göster
         run: echo $APP_ENV
 
