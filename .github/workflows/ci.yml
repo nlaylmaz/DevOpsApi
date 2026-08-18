@@ -4,6 +4,9 @@ on:
   push:
   pull_request:
 
+env:
+  APP_ENV: Test
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,6 +26,8 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
+      - name: Environment göster
+        run: echo $APP_ENV
 
   test:
     needs: build
