@@ -54,7 +54,7 @@ jobs:
       - name: Secret kontrol
         run: |
           if [ -z "$DB_PASSWORD" ]; then
-      	    echo "Secret gelmedi"
+            echo "Secret gelmedi"
             exit 1
           else
             echo "Secret başarıyla geldi"
