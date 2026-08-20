@@ -68,3 +68,14 @@ jobs:
           else
             echo "Secret başarıyla geldi"
           fi
+
+  docker-build:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Kodu al
+        uses: actions/checkout@v4
+
+      - name: Docker image oluştur
+        run: docker build -t nlaplmaz/devops-api:v1 .
