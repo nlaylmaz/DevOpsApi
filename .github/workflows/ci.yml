@@ -69,22 +69,22 @@ jobs:
             echo "Secret başarıyla geldi"
           fi
 
-docker-build:
-  needs: test
-  runs-on: ubuntu-latest
+  docker-build:
+    needs: test
+    runs-on: ubuntu-latest
 
-  steps:
-    - name: Kodu al
-      uses: actions/checkout@v4
+    steps:
+      - name: Kodu al
+        uses: actions/checkout@v4
 
-    - name: Docker Hub login
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Docker Hub login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Docker image oluştur
-      run: docker build -t nlaplmaz/devops-api:v1 .
+      - name: Docker image oluştur
+        run: docker build -t nlaplmaz/devops-api:v1 .
 
-    - name: Docker Hub'a gönder
-      run: docker push nlaplmaz/devops-api:v1
+      - name: Docker Hub'a gönder
+        run: docker push nlaplmaz/devops-api:v1
