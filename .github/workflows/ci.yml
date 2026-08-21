@@ -4,6 +4,10 @@ on:
   push:
   pull_request:
 
+permissions:
+  id-token: write
+  contents: read
+
 env:
   APP_ENV: Test
 
@@ -84,7 +88,26 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Docker image oluştur
-        run: docker build -t nlaplmaz/devops-api:v1 .
+        run: docker build -t nlaplmaz/devops-api:${{ github.sha }} .
 
       - name: Docker Hub'a gönder
-        run: docker push nlaplmaz/devops-api:v1
+        run: docker push nlaplmaz/devops-api:${{ github.sha }}
+
+  deploy:
+    needs: docker-build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Azure'a giriş
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Azure Container App'i güncelle
+        run: |
+          az containerapp update \
+            --name devops-api \
+            --resource-group devops-rg \
+            --image nlaplmaz/devops-api:${{ github.sha }}
